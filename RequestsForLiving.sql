@@ -1,0 +1,7 @@
+CREATE TABLE sleep
+(
+id INT NOT NULL AUTO_INCREMENT,
+date DATE,
+duration DECIMAL(2,1)
+PRIMARY KEY (id)
+);
