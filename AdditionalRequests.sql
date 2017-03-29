@@ -159,18 +159,37 @@ END;
 $$
 DELIMITER ;
 
+DELIMITER $$
+DROP PROCEDURE IF EXISTS setRecGoodsData
+$$
+CREATE PROCEDURE setRecGoodsData()
+BEGIN 
+	SET @counter = 0;
+	WHILE @counter < 3
+		DO
+			INSERT INTO recgoods (recept_id,subid,goods_id,volume,price)
+			VALUES ((SELECT id FROM recept WHERE id = (@counter+1)),(@counter+1),(SELECT id FROM goods WHERE id = (@counter+1)), FLOOR(RAND()*100),(FLOOR(RAND()*10000)/100));
+			SET @counter = @counter + 1;
+		END WHILE;
+END;
+$$
+DELIMITER ;
 
-
-
-
-
-
-
-
-
-
-
-
+DELIMITER $$
+DROP PROCEDURE IF EXISTS setIncGoodsData
+$$
+CREATE PROCEDURE setIncGoodsData()
+BEGIN 
+	SET @counter = 0;
+	WHILE @counter < 3
+		DO
+			INSERT INTO incgoods (income_id,subid,goods_id,volume,price)
+			VALUES ((SELECT id FROM income WHERE id = (@counter+1)),(@counter+1),(SELECT id FROM goods WHERE id = (@counter+1)), FLOOR(RAND()*100),(FLOOR(RAND()*10000)/100));
+			SET @counter = @counter + 1;
+		END WHILE;
+END;
+$$
+DELIMITER ;
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS setBankIncomeData
@@ -178,12 +197,51 @@ $$
 CREATE PROCEDURE setBankIncomeData()
 BEGIN 
 	SET @counter = 0;
-	WHILE @counter < 10
+	WHILE @counter < 3
 		DO
 			INSERT INTO bank_income (ddate, summ, client_id)
-			VALUES ((SELECT FROM_UNIXTIME(RAND() * 2147483647)),FLOOR(RAND())*10,RAND());
+			VALUES ((SELECT FROM_UNIXTIME(RAND() * 2147483647)),FLOOR(RAND()*100),(SELECT id FROM clients WHERE id = (@counter+1)));
 			SET @counter = @counter + 1;
 		END WHILE;
+END;
+$$
+DELIMITER ;
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS setCassaIncomeData
+$$
+CREATE PROCEDURE setCassaIncomeData()
+BEGIN 
+	SET @counter = 0;
+	WHILE @counter < 3
+		DO
+			INSERT INTO cassa_income (ddate, summ, client_id)
+			VALUES ((SELECT FROM_UNIXTIME(RAND() * 2147483647)),FLOOR(RAND()*100),(SELECT id FROM clients WHERE id = (@counter+1)));
+			SET @counter = @counter + 1;
+		END WHILE;
+END;
+$$
+DELIMITER ;
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS setBD_Data
+$$
+CREATE PROCEDURE setBD_Data()
+BEGIN 
+	CALL setStoragesData();
+	CALL setRegionData();
+	CALL setCityData();
+	CALL setClientsData();
+	CALL setReceptData();
+	CALL setIncomeData();
+	CALL setBankReceptData();
+	CALL setCassaReceptData();
+	CALL setGoodsGroupsData();
+	CALL setGoodsData();
+	CALL setRecGoodsData();
+	CALL setIncGoodsData();
+	CALL setBankIncomeData();
+	CALL setCassaIncomeData();
 END;
 $$
 DELIMITER ;
