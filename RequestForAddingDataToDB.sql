@@ -35,7 +35,6 @@ BEGIN
 			
 			INSERT INTO goods (g_group_id, name, weight, length, height, width)
 			VALUES ((SELECT id FROM goods_groups WHERE id = (@counter+1)), CONCAT('goods',FLOOR(RAND()*1000)), FLOOR(RAND()*100)/10, FLOOR(RAND()*100)/10, FLOOR(RAND()*100)/10, FLOOR(RAND()*100)/10);
-
 			
 			SET @counter = @counter + 1;
 		END WHILE;
